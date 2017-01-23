@@ -21,7 +21,10 @@
     // Scene background color to green.
     scene.clearColor = new BABYLON.Color3(0, 1, 0);
 
-    var camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0, 5, -10), scene);
+    //var camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0, 5, -10), scene);
+    var camera = new BABYLON.VRDeviceOrientationFreeCamera('camera1',
+      new BABYLON.Vector3(0, 5, -10), scene);
+
     camera.setTarget(BABYLON.Vector3.Zero());
 
     // Attach camera to canvas.
