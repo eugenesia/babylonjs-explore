@@ -21,6 +21,13 @@
     // Scene background color to green.
     scene.clearColor = new BABYLON.Color3(0, 1, 0);
 
+    // Gravity is downwards (negative Y).
+    scene.gravity = new BABYLON.Vector3(0, -9.81, 0);
+
+    // Turn on collisions for enabled things in scene.
+    scene.collisionsEnabled = false;
+
+
     var camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0, 5, -10), scene);
     // var camera = new BABYLON.VRDeviceOrientationFreeCamera('camera1',
     //   new BABYLON.Vector3(0, 5, -10), scene);
@@ -30,9 +37,18 @@
     // Attach camera to canvas.
     camera.attachControl(canvas, false);
 
+    // Don't allow player/camera to pass thru solid things.
+    camera.checkCollisions = true;
+    camera.applyGravity = true;
+
+    // Camera's (player's) collider ellipse.
+    camera.ellipsoid  = new BABYLON.Vector3(1, 1, 1);
+
+
     // Light points to the sky.
     var light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0, 1, 0), scene);
     light.intensity = 0.5;
+
 
     // Let's try our built-in 'sphere' shape. Params: name, subdivisions, size, scene
     var sphere = BABYLON.MeshBuilder.CreateSphere('sphere1',
@@ -44,12 +60,19 @@
     // Move sphere upwared 1/2 its height.
     sphere.position.y = 1;
 
+    // Allow player to push against sphere.
+    sphere.checkCollisions = true;
+
+
     // Let's try our built-in 'sphere' shape. Params: name, subdivisions, size, scene.
     var ground = BABYLON.MeshBuilder.CreateGround('ground1', {
       width: 100,
       height: 100,
       subdivisions: 2,
     }, scene);
+
+    // Make ground collidable so things won't fall thru it.
+    ground.checkCollisions = true;
 
     // Define a grass material for the ground.
     var materialGrass = new BABYLON.StandardMaterial('grass', scene);
