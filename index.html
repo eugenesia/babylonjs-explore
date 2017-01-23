@@ -48,6 +48,12 @@
     materialGrass.diffuseTexture = new BABYLON.Texture('assets/textures/green_grass.jpg', scene);
     ground.material = materialGrass;
 
+    BABYLON.SceneLoader.ImportMesh('', 'assets/models/',
+      'theatre.babylon', scene,
+      function (newMeshes, particleSystems) {
+        console.log('New meshes: %O', newMeshes);
+      });
+
     return scene;
   };
 
