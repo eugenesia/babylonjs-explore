@@ -3,7 +3,6 @@
   <title>Babylon - Explore</title>
   <link rel="stylesheet" href="css/style.css" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babylonjs/2.5.0/babylon.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.js"></script>
 </head>
 <body>
 
@@ -27,9 +26,6 @@
 
     // Turn on collisions for enabled things in scene.
     scene.collisionsEnabled = true;
-
-    // Enable physics using CannonJs.
-    scene.enablePhysics();
 
 
     var camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0, 5, -10), scene);
