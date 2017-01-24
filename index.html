@@ -28,6 +28,10 @@
     // Turn on collisions for enabled things in scene.
     scene.collisionsEnabled = true;
 
+    // Make it run faster by outsourcing collision detection to web workers.
+    scene.workerCollisions = true;
+
+
     var cameraPos = new BABYLON.Vector3(0, 8, 0);
     // camera = new BABYLON.FreeCamera('camera1', cameraPos, scene);
     camera = new BABYLON.VRDeviceOrientationFreeCamera('camera1', cameraPos, scene);
