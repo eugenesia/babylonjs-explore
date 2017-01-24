@@ -29,9 +29,8 @@
     scene.collisionsEnabled = true;
 
     var cameraPos = new BABYLON.Vector3(0, 8, 0);
-    camera = new BABYLON.FreeCamera('camera1', cameraPos, scene);
-    // var camera = new BABYLON.VRDeviceOrientationFreeCamera('camera1',
-    //   new BABYLON.Vector3(0, 5, -10), scene);
+    // camera = new BABYLON.FreeCamera('camera1', cameraPos, scene);
+    camera = new BABYLON.VRDeviceOrientationFreeCamera('camera1', cameraPos, scene);
 
     camera.setTarget(new BABYLON.Vector3(0, 7, 10));
 
