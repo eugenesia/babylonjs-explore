@@ -12,6 +12,7 @@
 
   var canvas = document.getElementById('renderCanvas');
   var engine = new BABYLON.Engine(canvas, true);
+  var camera;
 
   // Keep code compatible with Babylon.js Playground by using createScene()
   // function.
@@ -19,16 +20,16 @@
     var scene = new BABYLON.Scene(engine);
 
     // Scene background color to green.
-    scene.clearColor = new BABYLON.Color3(0, 1, 0);
+    scene.clearColor = new BABYLON.Color3(0.5, 0.5, 1);
 
     // Gravity is downwards (negative Y).
-    scene.gravity = new BABYLON.Vector3(0, -9.81, 0);
+    scene.gravity = new BABYLON.Vector3(0, -0.5, 0);
 
     // Turn on collisions for enabled things in scene.
     scene.collisionsEnabled = true;
 
-
-    var camera = new BABYLON.FreeCamera('camera1', new BABYLON.Vector3(0, 5, -10), scene);
+    var cameraPos = new BABYLON.Vector3(0, 10, 0);
+    camera = new BABYLON.FreeCamera('camera1', cameraPos, scene);
     // var camera = new BABYLON.VRDeviceOrientationFreeCamera('camera1',
     //   new BABYLON.Vector3(0, 5, -10), scene);
 
@@ -58,7 +59,12 @@
 
     // Allow player to push against sphere.
     sphere.checkCollisions = true;
+    sphere.isVisible = false;
 
+    // Create a unit cube to help with sizing.
+    var box = BABYLON.Mesh.CreateBox('box1', 1, scene);
+    box.position = new BABYLON.Vector3(0, 5, 0);
+    box.isVisible = false;
 
     // Let's try our built-in 'sphere' shape. Params: name, subdivisions, size, scene.
     var ground = BABYLON.Mesh.CreateGround('ground1', 100, 100, 2, scene);
@@ -66,23 +72,37 @@
     // Make ground collidable so things won't fall thru it.
     ground.checkCollisions = true;
 
+    ground.isVisible = false;
+
     // Define a grass material for the ground.
     var materialGrass = new BABYLON.StandardMaterial('grass', scene);
     materialGrass.diffuseTexture = new BABYLON.Texture('assets/textures/green_grass.jpg', scene);
     ground.material = materialGrass;
+    materialGrass.backFaceCulling = false;
 
 
     // Group all the sub-meshes of the theatre into a parent to manage them easily.
     var theatreParent = new BABYLON.Mesh.CreateBox('theatreParent', 1, scene);
-    theatreParent.scaling = new BABYLON.Vector3(0.5, 0.5, 0.5);
-    theatreParent.position = new BABYLON.Vector3(0, 10, 0);
+    theatreParent.scaling = new BABYLON.Vector3(2, 2, 2);
+    theatreParent.position = new BABYLON.Vector3(0, 2, 0);
+    theatreParent.rotation.x = Math.PI * 0.5;
+    theatreParent.checkCollisions = false;
+    theatreParent.isVisible = false;
 
     BABYLON.SceneLoader.ImportMesh('', 'assets/models/',
       'theatre.babylon', scene,
       function (newMeshes) {
         console.log('New meshes: %O', newMeshes);
+
         for (var i = 0; i < newMeshes.length; i++) {
-          newMeshes[i].parent = theatreParent;
+          var mesh = newMeshes[i];
+          mesh.checkCollisions = true;
+          mesh.parent = theatreParent;
+          mesh.material = new BABYLON.StandardMaterial('theatre', scene);
+          mesh.material.diffuseColor = new BABYLON.Color3(1, 0, 0);
+          mesh.material.backFaceCulling = false;
+
+          console.log(mesh.name);
         }
       });
 
@@ -97,8 +117,13 @@
   });
 
   // Watch for browser/canvas resize events
-  window.addEventListener("resize", function () {
+  window.addEventListener('resize', function () {
     engine.resize();
+  });
+
+  // Move camera on keypress.
+  window.addEventListener('keypress', function (evt) {
+
   });
 
 </script>
