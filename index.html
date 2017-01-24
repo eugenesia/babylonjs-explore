@@ -72,7 +72,7 @@
     // Make ground collidable so things won't fall thru it.
     ground.checkCollisions = true;
 
-    ground.isVisible = false;
+    //ground.isVisible = false;
 
     // Define a grass material for the ground.
     var materialGrass = new BABYLON.StandardMaterial('grass', scene);
@@ -178,7 +178,11 @@
 
   // Move camera on keypress.
   window.addEventListener('keypress', function (evt) {
-
+    if (evt.key === ' ') {
+      // Jump up 2 metres. This is to escape sinkholes where the camera gets
+      // stuck and cannot move.
+      camera.position.y += 2;
+    }
   });
 
 </script>
