@@ -89,6 +89,9 @@
     theatreParent.checkCollisions = false;
     theatreParent.isVisible = false;
 
+    // Show loading spinner.
+    engine.displayLoadingUI();
+
     BABYLON.SceneLoader.ImportMesh('', 'assets/models/',
       'theatre.babylon', scene,
       function (newMeshes) {
@@ -154,6 +157,8 @@
 
           console.log(mesh.name);
         }
+        engine.hideLoadingUI();
+
       });
 
     return scene;
