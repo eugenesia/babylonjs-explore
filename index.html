@@ -19,8 +19,8 @@
   var createScene = function () {
     var scene = new BABYLON.Scene(engine);
 
-    // Scene background color to green.
-    scene.clearColor = new BABYLON.Color3(0.5, 0.5, 1);
+    // Scene background color to blue.
+    scene.clearColor = new BABYLON.Color3(0.8, 0.8, 1);
 
     // Gravity is downwards (negative Y).
     scene.gravity = new BABYLON.Vector3(0, -0.5, 0);
@@ -40,7 +40,7 @@
 
     // Don't allow player/camera to pass thru solid things.
     camera.checkCollisions = true;
-    camera.applyGravity = true;
+    //camera.applyGravity = true;
 
     // Camera's (player's) collider ellipse.
     camera.ellipsoid  = new BABYLON.Vector3(1, 1, 1);
@@ -48,7 +48,7 @@
 
     // Light points to the sky.
     var light = new BABYLON.HemisphericLight('light1', new BABYLON.Vector3(0, 1, 0), scene);
-    light.intensity = 0.5;
+    light.intensity = 0.9;
 
 
     // Let's try our built-in 'sphere' shape. Params: name, subdivisions, size, scene
@@ -83,7 +83,7 @@
 
     // Group all the sub-meshes of the theatre into a parent to manage them easily.
     var theatreParent = new BABYLON.Mesh.CreateBox('theatreParent', 1, scene);
-    theatreParent.scaling = new BABYLON.Vector3(2, 2, 2);
+    theatreParent.scaling = new BABYLON.Vector3(4, 4, 4);
     theatreParent.position = new BABYLON.Vector3(0, 2, 0);
     theatreParent.rotation.x = Math.PI * 0.5;
     theatreParent.checkCollisions = false;
@@ -92,15 +92,64 @@
     BABYLON.SceneLoader.ImportMesh('', 'assets/models/',
       'theatre.babylon', scene,
       function (newMeshes) {
-        console.log('New meshes: %O', newMeshes);
+        //console.log('New meshes: %O', newMeshes);
+
+        var lectureTheatreMat = new BABYLON.StandardMaterial('lectureTheatre', scene);
+        lectureTheatreMat.diffuseColor = new BABYLON.Color3(0.9, 0.1, 0,5);
+        lectureTheatreMat.backFaceCulling = false;
+
+        var chairMat = new BABYLON.StandardMaterial('chair', scene);
+        chairMat.diffuseColor = new BABYLON.Color3(0.4, 0.1, 0);
+        chairMat.backFaceCulling = false;
+
+        var tableMat = new BABYLON.StandardMaterial('table', scene);
+        tableMat.diffuseColor = new BABYLON.Color3(0.2, 0, 0);
+        tableMat.backFaceCulling = false;
+
+        var whiteboardMat = new BABYLON.StandardMaterial('whiteboard', scene);
+        whiteboardMat.diffuseColor = new BABYLON.Color3(0, 0.2, 0);
+        whiteboardMat.backFaceCulling = false;
+
+        var ceilingMat = new BABYLON.StandardMaterial('ceiling', scene);
+        ceilingMat.diffuseColor = new BABYLON.Color3(0.1, 0.1, 0.1);
+        ceilingMat.backFaceCulling = false;
+
+        var podiumMat = new BABYLON.StandardMaterial('podium', scene);
+        podiumMat.diffuseColor = new BABYLON.Color3(0.8, 0, 0);
+        podiumMat.backFaceCulling = false;
+
+        var otherMat = new BABYLON.StandardMaterial('other', scene);
+        otherMat.diffuseColor = new BABYLON.Color3(0, 0, 0.3);
+        otherMat.backFaceCulling = false;
 
         for (var i = 0; i < newMeshes.length; i++) {
           var mesh = newMeshes[i];
           mesh.checkCollisions = true;
           mesh.parent = theatreParent;
-          mesh.material = new BABYLON.StandardMaterial('theatre', scene);
-          mesh.material.diffuseColor = new BABYLON.Color3(1, 0, 0);
-          mesh.material.backFaceCulling = false;
+
+          var meshName = mesh.name.toLowerCase();
+
+          if (meshName.startsWith('lecture_theatre')) {
+            mesh.material = lectureTheatreMat;
+          }
+          else if (meshName.startsWith('chair')) {
+            mesh.material = chairMat;
+          }
+          else if (meshName.startsWith('table')) {
+            mesh.material = tableMat;
+          }
+          else if (meshName.startsWith('whiteboard')) {
+            mesh.material = whiteboardMat;
+          }
+          else if (meshName.startsWith('ceiling')) {
+            mesh.material = ceilingMat;
+          }
+          else if (meshName.startsWith('podium')) {
+            mesh.material = podiumMat;
+          }
+          else {
+            mesh.material = otherMat;
+          }
 
           console.log(mesh.name);
         }
@@ -114,6 +163,12 @@
   // Register a render loop to repeatedly render the scene.
   engine.runRenderLoop(function () {
     scene.render();
+
+    // If camera goes to the bottom of the theatre, it sinks into the ground
+    // for some reason. So push it up.
+    if (camera.position.y < 5) {
+      camera.position.y = 5;
+    }
   });
 
   // Watch for browser/canvas resize events
