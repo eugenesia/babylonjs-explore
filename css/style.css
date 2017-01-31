@@ -4,6 +4,7 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
+  background-color: black;
 }
 
 #renderCanvas {
@@ -11,5 +12,21 @@ html, body {
   height: 100%;
   /* Disable browser handling of all panning and zooming gestures. */
   touch-action: none;
+}
+
+.instructions {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+}
+
+.instructions__underlay {
+  background-color: black;
+  opacity: 0.7;
+}
+
+.instructions__content {
+  display: inline-block;
+  color: white;
 }
 
